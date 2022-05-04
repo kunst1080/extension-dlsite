@@ -1,4 +1,4 @@
 export type MylistWork = {
-  id: string;
+  mylist_work_id: string;
   workno: string;
 };

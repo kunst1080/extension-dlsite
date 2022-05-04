@@ -1,5 +1,5 @@
 export type Mylist = {
-  id: string;
+  mylist_id: string;
   mylist_name: string;
-  mylist_work_id: string[];
+  mylist_work_ids: string[];
 };

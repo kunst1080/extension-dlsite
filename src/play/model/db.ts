@@ -11,20 +11,19 @@ class Database {
     const db = this.connect(dbname);
     this.mylist = new Finder(db, "Mylist", (obj: any) => {
       return {
-        id: obj.id,
+        mylist_id: String(obj.id),
         mylist_name: obj.mylist_name,
-        mylist_work_id: obj.mylist_work_id,
+        mylist_work_ids: obj.mylist_work_id,
       };
     });
     this.mylistWork = new Finder(db, "MylistWork", (obj: any) => {
       return {
-        id: obj.id,
+        mylist_work_id: String(obj.id),
         workno: obj.workno,
       };
     });
     this.purchase = new Finder(db, "Purchase", (obj: any) => {
       return {
-        id: obj.id,
         workno: obj.workno,
         work_name: obj.work.name.ja_JP,
         maker_name: obj.work.maker.name.ja_JP,

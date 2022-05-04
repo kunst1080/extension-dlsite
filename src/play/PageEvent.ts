@@ -24,9 +24,7 @@ const uniq = <T>(array: T[]): T[] => Array.from(new Set(array));
 
 const startObservers = () => {
   document
-    .querySelectorAll(
-      "#app .page-content .content:nth-child(2) ol.list-work li"
-    )
+    .querySelectorAll("#app .page-content .content ol.list-work li")
     .forEach((n) => onWorkLoadCallback(n));
   const content = document.querySelector("#app .page-content") as Node;
   const contentObserver = new MutationObserver((mutationsList, observer) => {
