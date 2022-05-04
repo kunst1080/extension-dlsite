@@ -38,9 +38,8 @@ Promise.all([
         const app = document.createElement("div");
         e.append(app);
         const work = findWork(e);
-        const myLists = work ? searchMylists(work.workno) : [];
-        console.log(myLists);
-        ReactDOM.render(<TagComponent />, app);
+        const lists = work ? searchMylists(work.workno) : [];
+        ReactDOM.render(<TagComponent mylists={lists} />, app);
     });
     onAppLoad((e) => {
         console.log("app init");
