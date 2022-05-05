@@ -8,10 +8,10 @@ export type Item = {
 
 export const FilterComponent = (props: {
     items: Item[];
-    onChange: (items: Item[]) => void;
+    onChange: (values: string[]) => void;
 }) => {
     const handleChange = (items: MultiValue<Item>) => {
-        props.onChange(Array.from(items));
+        props.onChange(items.map((it) => it.value));
     };
     const customStyles = {
         control: (base: any) => ({
