@@ -27,7 +27,8 @@ Promise.all([
         const work = purchases.find(
             (p) => p.maker_name === makerNmaae && p.work_name === workName
         );
-        if (work == undefined) new Error("Purchase not found");
+        if (work === undefined)
+            throw new Error(`Purchase not found: ${workName}`);
         return work as Purchase;
     };
 
@@ -36,7 +37,8 @@ Promise.all([
         const ml = mylists.filter((lst) =>
             lst.mylist_work_ids.includes(lw.mylist_work_id)
         );
-        if (ml.length !== 1) new Error("MylistWork structure is unexpected");
+        if (ml.length !== 1)
+            throw new Error("MylistWork structure is unexpected");
         acc.get(lw.workno)?.push(ml[0]);
         return acc;
     }, new Map<string, Mylist[]>());
