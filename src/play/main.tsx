@@ -2,13 +2,15 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { TagComponent } from "./component/TagComponent";
+import { FilterComponent, Item } from "./component/FilterComponent";
+
 import { onAppLoad, onWorkLoad } from "./PageEvent";
 import { db } from "./model/db";
 import { Purchase } from "./model/Purchase";
 import { Mylist } from "./model/Mylist";
 
-const findByQuery = (element: Element, queryString: string): string =>
-    (element.querySelector(queryString) as HTMLElement).innerText;
+const findByQuery = (element: Element, queryString: string): HTMLElement =>
+    element.querySelector(queryString) as HTMLElement;
 
 Promise.all([
     db.purchase.findAll(),
@@ -16,8 +18,8 @@ Promise.all([
     db.mylistWork.findAll(),
 ]).then(([purchases, mylists, mylistWorks]) => {
     const findWork = (element: Element): Purchase | undefined => {
-        const workName = findByQuery(element, ".work-name");
-        const makerNmaae = findByQuery(element, ".maker-name");
+        const workName = findByQuery(element, ".work-name").innerText;
+        const makerNmaae = findByQuery(element, ".maker-name").innerText;
         const work = purchases.find(
             (p) => p.maker_name === makerNmaae && p.work_name === workName
         );
@@ -43,5 +45,26 @@ Promise.all([
     });
     onAppLoad((e) => {
         console.log("app init");
+        // Hide logout
+        const logoutMenu = document.querySelector(
+            "nav.slide-menu .page-content > div:last-of-type"
+        ) as HTMLElement | null;
+        if (logoutMenu) logoutMenu.hidden = true;
+        // Playlist Filter
+        const app = document.createElement("div");
+        document.querySelector("nav.slide-menu .page-content")?.append(app);
+        const onFilterChange = (items: Item[]) => {
+            console.log(items);
+        };
+        ReactDOM.render(
+            <FilterComponent
+                items={mylists.map((m) => ({
+                    value: m.mylist_id,
+                    label: m.mylist_name,
+                }))}
+                onChange={onFilterChange}
+            />,
+            app
+        );
     });
 });
