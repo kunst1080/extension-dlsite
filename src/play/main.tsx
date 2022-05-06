@@ -80,7 +80,7 @@ Promise.all([
             "nav.slide-menu .page-content > div:last-of-type"
         ) as HTMLElement | null;
         if (logoutMenu) logoutMenu.hidden = true;
-        // Playlist Filter
+        // Mylist Filter
         const app = document.createElement("div");
         document.querySelector("nav.slide-menu .page-content")?.append(app);
         const onFilterChange = (values: string[]) => {
@@ -93,7 +93,7 @@ Promise.all([
         const options = [
             {
                 value: "-1",
-                label: "<プレイリストなし>",
+                label: "<マイリストなし>",
             },
         ].concat(
             mylists.map((m) => ({
