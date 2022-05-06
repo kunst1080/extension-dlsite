@@ -13,13 +13,24 @@ import { Mylist } from "./model/Mylist";
 const findByQuery = (element: Element, queryString: string): HTMLElement =>
     element.querySelector(queryString) as HTMLElement;
 
+const compareString = (a: string, b: string): number => {
+    const max = Math.min(a.length, b.length);
+    for (let i = 0; i < max; i++) {
+        if (a.charCodeAt(i) > b.charCodeAt(i)) {
+            return 1;
+        } else if (a.charCodeAt(i) < b.charCodeAt(i)) {
+            return -1;
+        }
+    }
+    return 0;
+};
+
+const sortMylist = (lists: Mylist[]): Mylist[] =>
+    lists.sort((a, b) => compareString(a.mylist_name, b.mylist_name));
+
 Promise.all([
     db.purchase.findAll(),
-    db.mylist
-        .findAll()
-        .then((o) =>
-            o.sort((a, b) => a.mylist_name.localeCompare(b.mylist_name))
-        ),
+    db.mylist.findAll().then(sortMylist),
     db.mylistWork.findAll(),
 ]).then(([purchases, mylists, mylistWorks]) => {
     const findWork = (element: Element): Purchase | null => {
@@ -65,7 +76,7 @@ Promise.all([
         const work = findWork(e);
         if (work) {
             const lists = workMylistMap.get(work.workno) || [];
-            ReactDOM.render(<TagComponent mylists={lists} />, app);
+            ReactDOM.render(<TagComponent mylists={sortMylist(lists)} />, app);
             workElementMap.set(work.workno, e);
             filterElement(e, lists);
         } else {
