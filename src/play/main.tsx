@@ -44,6 +44,18 @@ Promise.all([
 
     const workElementMap = new Map<string, Element>();
 
+    let selectedMylistIds: string[] = [];
+    const filterElement = (e: Element, mylists: Mylist[]) => {
+        if (
+            selectedMylistIds.length == 0 ||
+            mylists.some((l) => selectedMylistIds.includes(String(l.mylist_id)))
+        ) {
+            (e as HTMLElement).style.display = "";
+        } else {
+            (e as HTMLElement).style.display = "none";
+        }
+    };
+
     onWorkLoad((e) => {
         if (e.attributes.getNamedItem("extension-dlsite")) return;
         e.attributes.setNamedItem(document.createAttribute("extension-dlsite"));
@@ -54,6 +66,7 @@ Promise.all([
             const lists = workMylistMap.get(work.workno) || [];
             ReactDOM.render(<TagComponent mylists={lists} />, app);
             workElementMap.set(work.workno, e);
+            filterElement(e, lists);
         } else {
             console.error(`Purchase not found`);
             console.error(e);
@@ -70,16 +83,10 @@ Promise.all([
         const app = document.createElement("div");
         document.querySelector("nav.slide-menu .page-content")?.append(app);
         const onFilterChange = (values: string[]) => {
+            selectedMylistIds = values;
             workElementMap.forEach((e, workno) => {
                 const lists = workMylistMap.get(workno) || [];
-                if (
-                    values.length == 0 ||
-                    lists.some((l) => values.includes(String(l.mylist_id)))
-                ) {
-                    (e as HTMLElement).style.display = "";
-                } else {
-                    (e as HTMLElement).style.display = "none";
-                }
+                filterElement(e, lists);
             });
         };
         ReactDOM.render(
