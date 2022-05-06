@@ -3,17 +3,21 @@ const CHECK_INTERVAL = 1000;
 var onWorkLoadCallback: (element: Element) => void;
 
 export const onAppLoad = (callback: (element: Node) => void) => {
-  console.debug("start onAppLoad");
-  const timer = setInterval(check, CHECK_INTERVAL);
-  function check() {
-    console.debug("waiting app loaded");
-    const app = document.getElementById("app");
-    if (app != null) {
-      clearInterval(timer);
+  const appRoot = document.querySelector("body") as Node;
+  const contentObserver = new MutationObserver((mutationsList, observer) => {
+    if (mutationsList.some((m) => (m.target as Element).id === "app")) {
+      const app = mutationsList[0].target;
       callback(app);
-      startObservers();
+      setTimeout(() => {
+        startObservers();
+      }, 10);
     }
-  }
+  });
+  contentObserver.observe(appRoot, {
+    attributes: false,
+    childList: true,
+    subtree: true,
+  });
 };
 
 export const onWorkLoad = (callback: (element: Element) => void) => {
@@ -24,7 +28,7 @@ const uniq = <T>(array: T[]): T[] => Array.from(new Set(array));
 
 const startObservers = () => {
   document
-    .querySelectorAll("#app .page-content .content ol.list-work li")
+    .querySelectorAll("#app .page-content .content ol.list-work li.work")
     .forEach((n) => onWorkLoadCallback(n));
   const content = document.querySelector("#app .page-content") as Node;
   const contentObserver = new MutationObserver((mutationsList, observer) => {
@@ -50,9 +54,9 @@ const startObservers = () => {
           }
         }
       })
-      .filter((n) => n != null)
       // <ol> 要素から <li> 要素を展開
-      .flatMap((n) => Array.from(n.childNodes));
+      .flatMap((n) => Array.from(n.childNodes))
+      .filter((e) => (e as Element).classList.contains("work"));
     uniq(items).forEach((n) => onWorkLoadCallback(n as Element));
   });
   contentObserver.observe(content, {
