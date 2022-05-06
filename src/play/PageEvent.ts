@@ -3,17 +3,21 @@ const CHECK_INTERVAL = 1000;
 var onWorkLoadCallback: (element: Element) => void;
 
 export const onAppLoad = (callback: (element: Node) => void) => {
+  let isInitialize = true;
   const appRoot = document.querySelector("body") as Node;
-  const contentObserver = new MutationObserver((mutationsList, observer) => {
+  const appObserver = new MutationObserver((mutationsList, observer) => {
     if (mutationsList.some((m) => (m.target as Element).id === "app")) {
       const app = mutationsList[0].target;
-      callback(app);
+      if (isInitialize) {
+        callback(app);
+      }
+      isInitialize = false;
       setTimeout(() => {
         startObservers();
       }, 10);
     }
   });
-  contentObserver.observe(appRoot, {
+  appObserver.observe(appRoot, {
     attributes: false,
     childList: true,
     subtree: true,
