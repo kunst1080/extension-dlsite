@@ -89,14 +89,12 @@ Promise.all([
                 filterElement(e, lists);
             });
         };
-        ReactDOM.render(
-            <FilterComponent
-                items={mylists.map((m) => ({
+        const options = mylists.map((m) => ({
                     value: m.mylist_id,
                     label: m.mylist_name,
-                }))}
-                onChange={onFilterChange}
-            />,
+        }));
+        ReactDOM.render(
+            <FilterComponent options={options} onChange={onFilterChange} />,
             app
         );
     });

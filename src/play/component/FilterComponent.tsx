@@ -1,16 +1,16 @@
 import * as React from "react";
 import Select, { MultiValue } from "react-select";
 
-export type Item = {
+export type OptionItem = {
     value: string;
     label: string;
 };
 
 export const FilterComponent = (props: {
-    items: Item[];
+    options: OptionItem[];
     onChange: (values: string[]) => void;
 }) => {
-    const handleChange = (items: MultiValue<Item>) => {
+    const handleChange = (items: MultiValue<OptionItem>) => {
         props.onChange(items.map((it) => it.value));
     };
     const customStyles = {
@@ -38,7 +38,7 @@ export const FilterComponent = (props: {
             }}
         >
             <Select
-                options={props.items}
+                options={props.options}
                 styles={customStyles}
                 placeholder="Filter"
                 onChange={handleChange}
