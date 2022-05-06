@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 
 import { TagComponent } from "./component/TagComponent";
 import { ErrorComponent } from "./component/ErrorComponent";
-import { FilterComponent, Item } from "./component/FilterComponent";
+import { FilterComponent } from "./component/FilterComponent";
 
 import { onAppLoad, onWorkLoad } from "./PageEvent";
 import { db } from "./model/db";
@@ -48,6 +48,7 @@ Promise.all([
     const filterElement = (e: Element, mylists: Mylist[]) => {
         if (
             selectedMylistIds.length == 0 ||
+            (selectedMylistIds.includes("-1") && mylists.length == 0) ||
             mylists.some((l) => selectedMylistIds.includes(String(l.mylist_id)))
         ) {
             (e as HTMLElement).style.display = "";
@@ -89,10 +90,17 @@ Promise.all([
                 filterElement(e, lists);
             });
         };
-        const options = mylists.map((m) => ({
-                    value: m.mylist_id,
-                    label: m.mylist_name,
-        }));
+        const options = [
+            {
+                value: "-1",
+                label: "<プレイリストなし>",
+            },
+        ].concat(
+            mylists.map((m) => ({
+                value: m.mylist_id,
+                label: m.mylist_name,
+            }))
+        );
         ReactDOM.render(
             <FilterComponent options={options} onChange={onFilterChange} />,
             app
