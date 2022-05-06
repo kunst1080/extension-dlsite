@@ -11,9 +11,5 @@
       "matches": ["https://play.dlsite.com/*"],
       "js": ["play.js"]
     }
-  ],
-  "permissions": ["storage"],
-  "background": {
-    "service_worker": "background.js"
-  }
+  ]
 }

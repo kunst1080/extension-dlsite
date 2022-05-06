@@ -5,7 +5,6 @@ module.exports = {
     extensions: [".js", ".ts", ".tsx"],
   },
   entry: {
-    background: "./src/background.ts",
     play: "./src/play/main.tsx",
   },
   module: {
