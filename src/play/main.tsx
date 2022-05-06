@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { TagComponent } from "./component/TagComponent";
+import { ErrorComponent } from "./component/ErrorComponent";
 import { FilterComponent, Item } from "./component/FilterComponent";
 
 import { onAppLoad, onWorkLoad } from "./PageEvent";
@@ -21,14 +22,12 @@ Promise.all([
         ),
     db.mylistWork.findAll(),
 ]).then(([purchases, mylists, mylistWorks]) => {
-    const findWork = (element: Element): Purchase => {
+    const findWork = (element: Element): Purchase | null => {
         const workName = findByQuery(element, ".work-name").innerText;
         const makerNmaae = findByQuery(element, ".maker-name").innerText;
         const work = purchases.find(
             (p) => p.maker_name === makerNmaae && p.work_name === workName
         );
-        if (work === undefined)
-            throw new Error(`Purchase not found: ${workName}`);
         return work as Purchase;
     };
 
@@ -51,9 +50,15 @@ Promise.all([
         const app = document.createElement("div");
         e.append(app);
         const work = findWork(e);
-        const lists = workMylistMap.get(work.workno) || [];
-        ReactDOM.render(<TagComponent mylists={lists} />, app);
-        workElementMap.set(work.workno, e);
+        if (work) {
+            const lists = workMylistMap.get(work.workno) || [];
+            ReactDOM.render(<TagComponent mylists={lists} />, app);
+            workElementMap.set(work.workno, e);
+        } else {
+            console.error(`Purchase not found`);
+            console.error(e);
+            ReactDOM.render(<ErrorComponent />, app);
+        }
     });
     onAppLoad((e) => {
         // Hide logout
