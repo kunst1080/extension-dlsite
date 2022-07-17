@@ -1,15 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "DLsite Play Extension",
+  "name": "DLsite Extension",
   "version": "0.0.1",
-  "description": "DLsite Playの機能拡張",
+  "description": "DLsite と DLsite Play の機能拡張",
   "action": {
-    "default_title": "DLsite Play Extension"
+    "default_title": "DLsite Extension"
   },
   "content_scripts": [
     {
       "matches": ["https://play.dlsite.com/*"],
-      "js": ["play.js"]
+      "js": ["play.js"],
+      "css": ["style.css"]
+    },
+    {
+      "matches": ["https://www.dlsite.com/*"],
+      "js": ["list.js"],
+      "css": ["style.css"]
     }
   ]
 }

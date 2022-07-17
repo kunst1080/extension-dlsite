@@ -6,6 +6,7 @@ module.exports = {
   },
   entry: {
     play: "./src/play/main.tsx",
+    list: "./src/list/main.tsx",
   },
   module: {
     rules: [
@@ -21,6 +22,10 @@ module.exports = {
         {
           from: "./src/manifest.json",
           to: "manifest.json",
+        },
+        {
+          from: "./src/style.css",
+          to: "style.css",
         },
       ],
     }),
