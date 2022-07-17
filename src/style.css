@@ -1,3 +1,7 @@
 .mask-purchased {
     background-color: #999;
 }
+
+.mask-favorited {
+    background-color: rgb(200, 255, 198);
+}
