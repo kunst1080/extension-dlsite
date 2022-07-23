@@ -6,6 +6,9 @@
 .custom-filter label {
     margin-left: 10px;
 }
+.custom-filter input {
+    width: 100px;
+}
 
 .mask-purchased {
     background-color: #999;
@@ -16,5 +19,9 @@
 }
 
 .mask-waribiki {
+    display: none !important;
+}
+
+.mask-price {
     display: none !important;
 }

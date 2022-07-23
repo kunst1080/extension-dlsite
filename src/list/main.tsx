@@ -13,7 +13,11 @@ class Item {
 
     constructor(ref: HTMLElement) {
         this.ref = ref;
-        this.price = 0;
+        this.price = parseInt(
+            ref
+                .querySelector<HTMLElement>(".work_price")
+                ?.textContent?.replace(",", "") || "0"
+        );
         this.isPurchased = ref.querySelector(".btn_dl") != null;
         this.isFavorited = ref.querySelector(".btn_favorite_in") != null;
         this.waribikiRate = parseInt(
@@ -50,6 +54,17 @@ const main = () => {
             allItems.push(it);
         });
 
+    const filterPrice = (text: string) => {
+        const className = "mask-price";
+        const v = parseInt(text);
+        allItems.forEach((it) => {
+            if (v > 0 && (it.price > v || it.isPurchased)) {
+                it.addClass(className);
+            } else {
+                it.removeClass(className);
+            }
+        });
+    };
     const filterWaribiki = (text: string) => {
         const className = "mask-waribiki";
         const v = parseInt(text);
@@ -67,6 +82,9 @@ const main = () => {
     document.querySelector("#header")?.append(app);
     ReactDOM.render(
         <div>
+            <FilterTextComponnet onUpdate={filterPrice}>
+                販売価格
+            </FilterTextComponnet>
             <FilterTextComponnet onUpdate={filterWaribiki}>
                 割引率
             </FilterTextComponnet>
