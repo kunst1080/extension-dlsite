@@ -1,32 +1,24 @@
 import { Mylist } from "./Mylist";
-import { MylistWork } from "./MylistWork";
 import { Purchase } from "./Purchase";
 
 class Database {
   mylist: Finder<Mylist>;
-  mylistWork: Finder<MylistWork>;
   purchase: Finder<Purchase>;
 
   public constructor(dbname: string) {
     const db = this.connect(dbname);
-    this.mylist = new Finder(db, "Mylist", (obj: any) => {
+    this.mylist = new Finder(db, "MyList", (obj: any) => {
       return {
         mylist_id: String(obj.id),
-        mylist_name: obj.mylist_name,
-        mylist_work_ids: obj.mylist_work_id,
-      };
-    });
-    this.mylistWork = new Finder(db, "MylistWork", (obj: any) => {
-      return {
-        mylist_work_id: String(obj.id),
-        workno: obj.workno,
+        mylist_name: obj.title,
+        worknos: obj.data,
       };
     });
     this.purchase = new Finder(db, "Purchase", (obj: any) => {
       return {
         workno: obj.workno,
-        work_name: obj.work.name.ja_JP,
-        maker_name: obj.work.maker.name.ja_JP,
+        work_name: obj.name.ja_JP,
+        maker_name: obj.maker.name.ja_JP,
       };
     });
   }
@@ -67,12 +59,12 @@ class Finder<T> {
         request.onsuccess = (event) => {
           const res = (event.target as IDBRequest)
             .result as IDBCursorWithValue[];
-          resolve(res.map((r) => this.convert(r.value)));
+          resolve(res.map((r) => this.convert(r)));
         };
       });
     });
   }
 }
 
-const dbname = localStorage.dbnames.match(/"(\w*)"/)[1];
+const dbname = localStorage.dbnames.match(/(Play_\w*)/)[1];
 export const db = new Database(dbname);

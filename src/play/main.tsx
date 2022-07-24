@@ -28,11 +28,8 @@ const compareString = (a: string, b: string): number => {
 const sortMylist = (lists: Mylist[]): Mylist[] =>
     lists.sort((a, b) => compareString(a.mylist_name, b.mylist_name));
 
-Promise.all([
-    db.purchase.findAll(),
-    db.mylist.findAll().then(sortMylist),
-    db.mylistWork.findAll(),
-]).then(([purchases, mylists, mylistWorks]) => {
+Promise.all([db.purchase.findAll(), db.mylist.findAll().then(sortMylist)]).then(
+    ([purchases, mylists]) => {
     const findWork = (element: Element): Purchase | null => {
         const workName = findByQuery(element, ".work-name").innerText;
         const makerNmaae = findByQuery(element, ".maker-name").innerText;
@@ -42,14 +39,11 @@ Promise.all([
         return work as Purchase;
     };
 
-    const workMylistMap = mylistWorks.reduce((acc, lw) => {
-        if (!acc.has(lw.workno)) acc.set(lw.workno, []);
-        const ml = mylists.filter((lst) =>
-            lst.mylist_work_ids.includes(lw.mylist_work_id)
-        );
-        if (ml.length !== 1)
-            throw new Error("MylistWork structure is unexpected");
-        acc.get(lw.workno)?.push(ml[0]);
+        const workMylistMap = mylists.reduce((acc, lst) => {
+            lst.worknos.forEach((no) => {
+                if (!acc.has(no)) acc.set(no, []);
+                acc.get(no)?.push(lst);
+            });
         return acc;
     }, new Map<string, Mylist[]>());
 
@@ -60,7 +54,9 @@ Promise.all([
         if (
             selectedMylistIds.length == 0 ||
             (selectedMylistIds.includes("-1") && mylists.length == 0) ||
-            mylists.some((l) => selectedMylistIds.includes(String(l.mylist_id)))
+                mylists.some((l) =>
+                    selectedMylistIds.includes(String(l.mylist_id))
+                )
         ) {
             (e as HTMLElement).style.display = "";
         } else {
