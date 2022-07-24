@@ -92,15 +92,15 @@ Promise.all([db.purchase.findAll(), db.mylist.findAll().then(sortMylist)]).then(
                 ReactDOM.render(<ErrorComponent />, app);
             }
         });
-        onAppLoad((e) => {
+        onAppLoad(() => {
             // Hide logout
-            const logoutMenu = document.querySelector(
-                "nav.slide-menu .page-content > div:last-of-type"
-            ) as HTMLElement | null;
+            const logoutMenu = document.querySelector<HTMLElement>(
+                `[class^="Menu_item__"]:last-of-type`
+            );
             if (logoutMenu) logoutMenu.hidden = true;
             // Mylist Filter
             const app = document.createElement("div");
-            document.querySelector("nav.slide-menu .page-content")?.append(app);
+            document.querySelector(`[class^="Menu_nav__"]`)?.append(app);
             const onFilterChange = (values: string[]) => {
                 selectedMylistIds = values;
                 workElementMap.forEach((e, workno) => {

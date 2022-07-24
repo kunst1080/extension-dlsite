@@ -1,7 +1,12 @@
 var onWorkLoadCallback: (element: Element) => void;
 
-export const onAppLoad = (callback: (element: Node) => void) => {
+export const onAppLoad = (callback: () => void) => {
+  var isInit = true;
   const appObserver = new MutationObserver((mutationsList, observer) => {
+    if (isInit) {
+      callback();
+      isInit = false;
+    }
     const list1 = mutationsList
       .map((m) => m.target as HTMLElement)
       .filter((e) => e.id === "App" || e.className.includes("Library_inner__"));
