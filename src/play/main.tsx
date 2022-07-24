@@ -10,8 +10,10 @@ import { db } from "./model/db";
 import { Purchase } from "./model/Purchase";
 import { Mylist } from "./model/Mylist";
 
-const findByQuery = (element: Element, queryString: string): HTMLElement =>
-    element.querySelector(queryString) as HTMLElement;
+const findByQuery = (
+    element: Element,
+    queryString: string
+): HTMLElement | null => element.querySelector<HTMLElement>(queryString);
 
 const compareString = (a: string, b: string): number => {
     const max = Math.min(a.length, b.length);
@@ -30,19 +32,19 @@ const sortMylist = (lists: Mylist[]): Mylist[] =>
 
 Promise.all([db.purchase.findAll(), db.mylist.findAll().then(sortMylist)]).then(
     ([purchases, mylists]) => {
-        const findWork = (element: Element): Purchase | null => {
+        const findWork = (element: Element): Purchase | undefined => {
             const workName = findByQuery(
                 element,
                 `[class*="_workName__"]`
-            ).innerText;
+            )?.innerText;
             const makerName = findByQuery(
                 element,
                 `[class*="_makerName__"]`
-            ).innerText;
+            )?.innerText;
             const work = purchases.find(
                 (p) => p.maker_name === makerName && p.work_name === workName
             );
-            return work as Purchase;
+            return work;
         };
 
         const workMylistMap = mylists.reduce((acc, lst) => {
@@ -53,10 +55,10 @@ Promise.all([db.purchase.findAll(), db.mylist.findAll().then(sortMylist)]).then(
             return acc;
         }, new Map<string, Mylist[]>());
 
-        const workElementMap = new Map<string, Element>();
+        const workElementMap = new Map<string, HTMLElement>();
 
         let selectedMylistIds: string[] = [];
-        const filterElement = (e: Element, mylists: Mylist[]) => {
+        const filterElement = (e: HTMLElement, mylists: Mylist[]) => {
             if (
                 selectedMylistIds.length == 0 ||
                 (selectedMylistIds.includes("-1") && mylists.length == 0) ||
@@ -64,13 +66,13 @@ Promise.all([db.purchase.findAll(), db.mylist.findAll().then(sortMylist)]).then(
                     selectedMylistIds.includes(String(l.mylist_id))
                 )
             ) {
-                (e as HTMLElement).style.display = "";
+                e.style.display = "";
             } else {
-                (e as HTMLElement).style.display = "none";
+                e.style.display = "none";
             }
         };
 
-        onWorkLoad((e) => {
+        onWorkLoad((e: HTMLElement) => {
             if (e.attributes.getNamedItem("extension-dlsite")) return;
             e.attributes.setNamedItem(
                 document.createAttribute("extension-dlsite")

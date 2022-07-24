@@ -1,4 +1,4 @@
-var onWorkLoadCallback: (element: Element) => void;
+var onWorkLoadCallback: (element: HTMLElement) => void;
 
 export const onAppLoad = (callback: () => void) => {
   var isInit = true;
@@ -22,7 +22,7 @@ export const onAppLoad = (callback: () => void) => {
   });
 };
 
-export const onWorkLoad = (callback: (element: Element) => void) => {
+export const onWorkLoad = (callback: (element: HTMLElement) => void) => {
   onWorkLoadCallback = callback;
 };
 
