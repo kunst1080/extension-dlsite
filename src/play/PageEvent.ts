@@ -36,7 +36,7 @@ const startObservers = (app: HTMLElement) => {
       .flatMap((e) =>
         Array.from(
           e.querySelectorAll<HTMLElement>(
-            `[class^="WorkList_list__"], [class^="MylistDetailItem_list__"]`
+            `[class^="WorkList_list__"], [class^="MyListDetailItem_item__"]`
           )
         )
       );
