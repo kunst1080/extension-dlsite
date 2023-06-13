@@ -140,6 +140,7 @@ const main = () => {
     );
 };
 
-if (!location.pathname.includes("/work/")) {
+const excludePaths = ["/work/", "/mypage", "/cart", "/pay/", "/download/"];
+if (!excludePaths.some((p) => location.pathname.includes(p))) {
     window.addEventListener("load", main, false);
 }
