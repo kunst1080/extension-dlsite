@@ -140,7 +140,11 @@ const main = () => {
     );
 };
 
+const includePaths = ["/wishlist"];
 const excludePaths = ["/work/", "/mypage", "/cart", "/pay/", "/download/"];
-if (!excludePaths.some((p) => location.pathname.includes(p))) {
+if (
+    includePaths.some((p) => location.pathname.includes(p)) ||
+    !excludePaths.some((p) => location.pathname.includes(p))
+) {
     window.addEventListener("load", main, false);
 }
