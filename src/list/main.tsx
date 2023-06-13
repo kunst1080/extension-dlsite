@@ -140,4 +140,6 @@ const main = () => {
     );
 };
 
-window.addEventListener("load", main, false);
+if (!location.pathname.includes("/work/")) {
+    window.addEventListener("load", main, false);
+}
