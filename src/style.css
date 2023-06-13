@@ -1,12 +1,10 @@
 .custom-filter {
-    position: absolute;
-    right: 10px;
-    margin-top: -3em;
+    float: right;
 }
 .custom-filter label {
     margin-left: 10px;
 }
-.custom-filter input {
+.custom-filter input.short {
     width: 100px;
 }
 
@@ -18,10 +16,6 @@
     background-color: rgb(200, 255, 198);
 }
 
-.mask-waribiki {
-    display: none !important;
-}
-
-.mask-price {
+[class*="hide-"] {
     display: none !important;
 }

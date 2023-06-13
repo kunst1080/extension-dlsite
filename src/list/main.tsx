@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { FilterTextComponnet } from "./component/FilterTextComponent";
+import { FilterCheckComponnet } from "./component/FilterCheckComponent";
 
 class Item {
     private ref: HTMLElement;
@@ -10,6 +11,7 @@ class Item {
     isPurchased: boolean;
     isFavorited: boolean;
     waribikiRate: number;
+    typeName: string;
 
     constructor(ref: HTMLElement) {
         this.ref = ref;
@@ -23,6 +25,7 @@ class Item {
         this.waribikiRate = parseInt(
             ref.querySelector<HTMLElement>(".type_sale")?.textContent || "0"
         );
+        this.typeName = ref.querySelector(".work_category")?.textContent || "";
     }
 
     addClass(className: string) {
@@ -55,7 +58,7 @@ const main = () => {
         });
 
     const filterPrice = (text: string) => {
-        const className = "mask-price";
+        const className = "hide-price";
         const v = parseInt(text);
         allItems.forEach((it) => {
             if (v > 0 && (it.price > v || it.isPurchased)) {
@@ -66,7 +69,7 @@ const main = () => {
         });
     };
     const filterWaribiki = (text: string) => {
-        const className = "mask-waribiki";
+        const className = "hide-waribiki";
         const v = parseInt(text);
         allItems.forEach((it) => {
             if (v > 0 && (it.waribikiRate < v || it.isPurchased)) {
@@ -76,12 +79,56 @@ const main = () => {
             }
         });
     };
+    const filterType =
+        (className: string, typeName: string) => (checked: boolean) => {
+            const regexp = new RegExp(typeName);
+            allItems.forEach((it) => {
+                if (!checked && it.typeName.match(typeName)) {
+                    it.addClass(className);
+                } else {
+                    it.removeClass(className);
+                }
+            });
+        };
 
     const app = document.createElement("div");
     app.className = "custom-filter";
     document.querySelector("#header")?.append(app);
     ReactDOM.render(
         <div>
+            <FilterCheckComponnet
+                onUpdate={filterType("hide-manga", "マンガ")}
+                defaultChecked={true}
+            >
+                マンガ
+            </FilterCheckComponnet>
+            <FilterCheckComponnet
+                onUpdate={filterType("hide-cg", "CG")}
+                defaultChecked={true}
+            >
+                CG・イラスト
+            </FilterCheckComponnet>
+            <FilterCheckComponnet
+                onUpdate={filterType("hide-voice", "ボイス")}
+                defaultChecked={true}
+            >
+                ボイス・ASMR
+            </FilterCheckComponnet>
+            <FilterCheckComponnet
+                onUpdate={filterType("hide-novel", "ノベル")}
+                defaultChecked={true}
+            >
+                ノベル
+            </FilterCheckComponnet>
+            <FilterCheckComponnet
+                onUpdate={filterType(
+                    "hide-game",
+                    "シミュレーション|ロールプレイング|動画"
+                )}
+                defaultChecked={true}
+            >
+                ゲーム・動画
+            </FilterCheckComponnet>
             <FilterTextComponnet onUpdate={filterPrice}>
                 販売価格
             </FilterTextComponnet>

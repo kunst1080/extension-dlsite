@@ -15,6 +15,7 @@ export const FilterTextComponnet = (props: {
             <input
                 id={id}
                 type="text"
+                className="short"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
