@@ -123,7 +123,7 @@ const main = () => {
             <FilterCheckComponnet
                 onUpdate={filterType(
                     "hide-game",
-                    "シミュレーション|ロールプレイング|動画"
+                    "シミュレーション|ロールプレイング|動画|アドベンチャー|音楽"
                 )}
                 defaultChecked={true}
             >
