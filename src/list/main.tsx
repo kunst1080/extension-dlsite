@@ -41,7 +41,7 @@ const main = () => {
     const allItems: Item[] = [];
     document
         .querySelectorAll<HTMLElement>(
-            "#search_result_img_box > li, #wishlist_work tr, .n_worklist tr, .n_worklist_item"
+            "#search_result_img_box > li, #wishlist_work article, .n_worklist tr, .n_worklist_item"
         )
         .forEach((e) => {
             // init
